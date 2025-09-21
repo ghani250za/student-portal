@@ -4,8 +4,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    // قراءة الـ body (Vercel يمررها تلقائياً كـ JSON)
-    const { q, source, target, format } = req.body;
+    // إذا كان البودي غير محلول نقرأه يدويًا
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const { q, source, target, format } = body;
 
     const response = await fetch("https://translate.argosopentech.com/translate", {
       method: "POST",
@@ -14,7 +15,7 @@ export default async function handler(req, res) {
     });
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      throw new Error(`Translation API error: ${response.status}`);
     }
 
     const data = await response.json();
