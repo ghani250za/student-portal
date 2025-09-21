@@ -63,7 +63,7 @@
       document.getElementById("result").innerText = "⏳ جاري الترجمة...";
 
       try {
-        let res = await fetch("https://translate.astian.org/translate", {
+        let res = await fetch("/api/translate", {
           method: "POST",
           body: JSON.stringify({
             q: text,
@@ -84,3 +84,4 @@
 
 </body>
 </html>
+
