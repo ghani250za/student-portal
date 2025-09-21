@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>📅 الجداول — طلبة سنة 3 ليسانس لغة فرنسية</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- خط -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', system-ui, Arial, sans-serif; direction: rtl; }
+    #schedule-root { direction: ltr; }
+    .badge { font-size: 11px; padding: 3px 8px; border-radius: 999px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+  <!-- ✅ شريط التنقل -->
+  <nav class="bg-indigo-700 text-white px-6 py-4 flex gap-6 justify-center shadow-md">
+    <a href="index.html" class="hover:underline">الرئيسية</a>
+    <a href="timetable.html" class="font-bold underline">الجداول</a>
+    <a href="cours.html" class="hover:underline">الدروس</a>
+    <a href="news.html" class="hover:underline">الأخبار</a>
+    <a href="translate.html" class="hover:underline">الترجمة</a>
+  </nav>
+
+  <main class="max-w-6xl mx-auto p-4">
+    <header class="text-center mb-6">
+      <h1 class="text-2xl sm:text-3xl font-bold">📅 Planning Licence 3 — Semestre 1 (2025-2026)</h1>
+      <p class="text-sm text-slate-500 mt-1">اختر مجموعتك لعرض الجدول</p>
+    </header>
+
+    <section id="controls" class="mb-6 flex flex-wrap justify-center gap-3"></section>
+
+    <section id="table-wrap" class="bg-white rounded-2xl p-4 shadow">
+      <div id="schedule-root"></div>
+    </section>
+
+    <footer class="text-center mt-6 text-sm text-slate-400">
+      تم الإنشاء تلقائياً — يمكنك تعديل البيانات في ملف timetable.html<br>
+      <span class="font-semibold text-slate-500">By: abd elghani amrani ✍️</span>
+    </footer>
+  </main>
+
+  <!-- ✅ كود الجداول -->
+  <script>
+    const SCHEDULES = {
+      G1: [
+        ["Dimanche", "09:30–11:00", "CIV – Pr Mesbahi (S41)"],
+        ["Dimanche", "11:00–12:30", "MRS – Dre Telhig (S41)"],
+        ["Dimanche", "12:30–14:00", "CIV – Pr Mesbahi (Cours AMPHI A)"],
+        ["Lundi", "08:00–09:30", "Didactique – Dr Ghouli (Cours AMPHI A)"],
+        ["Lundi", "09:30–11:00", "Littérature – Dre Chihani (Cours AMPHI A)"],
+        ["Lundi", "11:00–12:30", "Didactique – Dr Ghouli (S41)"],
+        ["Lundi", "12:30–14:00", "MRS – Dre Telhig (S41)"],
+        ["Mardi", "09:30–11:00", "CEO – Dre Badi K (S41)"],
+        ["Mardi", "11:00–12:30", "Littérature – Dre Chihani (S41)"],
+        ["Mardi", "12:30–14:00", "Entrepreneuriat (S41)"],
+        ["Mercredi", "08:00–09:30", "Linguistique – Mme Kobbi (S41)"],
+        ["Mercredi", "09:30–11:00", "Langue de spé – Dr Chemmar (S41)"],
+        ["Mercredi", "11:00–12:30", "Atelier – Mme Kobbi (S41)"],
+        ["Mercredi", "12:30–14:00", "Traduction – M. Ferhat (Cours AMPHI A)"],
+        ["Jeudi", "08:00–09:30", "Atelier – Mme Kobbi (S41)"],
+        ["Jeudi", "09:30–11:00", "Traduction – M. Ferhat (S41)"],
+        ["Jeudi", "11:00–12:30", "Linguistique – Mme Kobbi (Cours AMPHI A)"],
+        ["Jeudi", "12:30–14:00", "Entrepreneuriat (cours à distance – Dr. Miloudi)"],
+      ],
+      G2: [
+        ["Dimanche", "09:30–11:00", "Didactique – Dr Ghouli (S42)"],
+        ["Dimanche", "11:00–12:30", "MRS – Dre Meftah (S42)"],
+        ["Dimanche", "12:30–14:00", "CIV – Pr Mesbahi (Cours AMPHI A)"],
+        ["Lundi", "08:00–09:30", "Didactique – Dr Ghouli (Cours AMPHI A)"],
+        ["Lundi", "09:30–11:00", "Littérature – Dre Chihani (Cours AMPHI A)"],
+        ["Lundi", "11:00–12:30", "CIV – Pr Mesbahi (S42)"],
+        ["Lundi", "12:30–14:00", "MRS – Dre Meftah (S42)"],
+        ["Mardi", "08:00–09:30", "Littérature – Dre Chihani (S42)"],
+        ["Mardi", "09:30–11:00", "Atelier – Dre Khelef H (S42)"],
+        ["Mardi", "11:00–12:30", "CEO – Dre Badi K (S42)"],
+        ["Mercredi", "08:00–09:30", "Atelier de Littérature – Dre Khelef H (S42)"],
+        ["Mercredi", "09:30–11:00", "Traduction – M. Ferhat (S42)"],
+        ["Mercredi", "11:00–12:30", "Entrepreneuriat (S42)"],
+        ["Mercredi", "12:30–14:00", "Traduction – M. Ferhat (Cours AMPHI A)"],
+        ["Jeudi", "08:00–09:30", "Langue de spé – Dr Chemmar (S42)"],
+        ["Jeudi", "09:30–11:00", "Linguistique – Mme Kobbi (S42)"],
+        ["Jeudi", "11:00–12:30", "Linguistique – Mme Kobbi (Cours AMPHI A)"],
+        ["Jeudi", "12:30–14:00", "Entrepreneuriat (cours à distance – Dr. Miloudi)"],
+      ],
+      G3: [
+        ["Dimanche", "08:00–09:30", "MRS – Pr Mezghouni (S43)"],
+        ["Dimanche", "09:30–11:00", "MRS – Pr Mezghouni (S43)"],
+        ["Dimanche", "11:00–12:30", "Didactique – Dr Ghouli (S43)"],
+        ["Dimanche", "12:30–14:00", "CIV – Pr Mesbahi (Cours AMPHI A)"],
+        ["Lundi", "08:00–09:30", "Didactique – Dr Ghouli (Cours AMPHI A)"],
+        ["Lundi", "09:30–11:00", "Littérature – Dre Chihani (Cours AMPHI A)"],
+        ["Lundi", "12:30–14:00", "Littérature – Dre Chihani (S43)"],
+        ["Lundi", "14:00–15:30", "CIV – Pr Mesbahi (S43)"],
+        ["Mardi", "09:30–11:00", "Atelier – Dre Chihani (S43)"],
+        ["Mardi", "12:30–14:00", "CEO – Dre Badi K (S43)"],
+        ["Mercredi", "08:00–09:30", "Linguistique – Mme Kobbi (S43)"],
+        ["Mercredi", "09:30–11:00", "Langue de spé – Dr Chemmar (S43)"],
+        ["Mercredi", "12:30–14:00", "Traduction – M. Ferhat (Cours AMPHI A)"],
+        ["Jeudi", "08:00–09:30", "Traduction – M. Ferhat (S43)"],
+        ["Jeudi", "11:00–12:30", "Linguistique – Mme Kobbi (Cours AMPHI A)"],
+        ["Jeudi", "12:30–14:00", "Entrepreneuriat (cours à distance – Dr. Miloudi)"],
+      ],
+    };
+
+    const DAY_COLORS = {
+      Dimanche: { background: 'bg-amber-100', text: 'text-amber-800' },
+      Lundi:    { background: 'bg-orange-100', text: 'text-orange-800' },
+      Mardi:    { background: 'bg-sky-100', text: 'text-sky-800' },
+      Mercredi: { background: 'bg-emerald-100', text: 'text-emerald-800' },
+      Jeudi:    { background: 'bg-slate-200', text: 'text-slate-700' },
+    };
+
+    function renderGroupButtons(rootEl) {
+      const groups = Object.keys(SCHEDULES);
+      groups.forEach(g => {
+        const btn = document.createElement('button');
+        btn.textContent = `Groupe ${g}`;
+        btn.className = 'px-4 py-2 rounded-xl font-semibold shadow bg-indigo-600 text-white hover:bg-indigo-700 transition text-sm';
+        btn.addEventListener('click', () => renderSchedule(g));
+        rootEl.appendChild(btn);
+      });
+    }
+
+    function CourseCard(course, dayColor) {
+      const div = document.createElement('div');
+      const isAmphi = course.toLowerCase().includes('amphi');
+      const isOnline = course.toLowerCase().includes('distance');
+
+      if (isAmphi) {
+        div.className = 'p-2 rounded-lg shadow-sm bg-indigo-700 text-white';
+      } else {
+        div.className = `p-2 rounded-lg shadow-sm ${dayColor.background} ${dayColor.text}`;
+      }
+
+      const parts = course.split('–');
+      const subj = document.createElement('p');
+      subj.className = 'font-bold text-sm';
+      subj.textContent = parts[0].trim();
+      div.appendChild(subj);
+
+      if (parts.length > 1) {
+        const detail = document.createElement('p');
+        detail.className = 'text-xs mt-1';
+        detail.textContent = parts.slice(1).join('–').trim();
+        div.appendChild(detail);
+      }
+
+      if (isOnline) {
+        const badge = document.createElement('span');
+        badge.className = 'badge bg-blue-100 text-blue-800 mt-2 inline-block';
+        badge.textContent = 'À distance';
+        div.appendChild(badge);
+      }
+      return div;
+    }
+
+    function renderSchedule(group) {
+      const root = document.getElementById('schedule-root');
+      root.innerHTML = '';
+
+      const titleRow = document.createElement('div');
+      titleRow.className = 'flex items-center justify-between mb-4';
+
+      const backBtn = document.createElement('button');
+      backBtn.className = 'flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800 font-semibold';
+      backBtn.textContent = '◀ Retour';
+      backBtn.addEventListener('click', () => {
+        document.getElementById('controls').style.display = '';
+        root.innerHTML = '';
+      });
+      titleRow.appendChild(backBtn);
+
+      const h2 = document.createElement('h2');
+      h2.className = 'text-lg font-bold';
+      h2.textContent = `Groupe ${group}`;
+      titleRow.appendChild(h2);
+      root.appendChild(titleRow);
+
+      const schedule = SCHEDULES[group];
+      const days = [...new Set(schedule.map(e => e[0]))];
+
+      days.forEach(day => {
+        const dc = DAY_COLORS[day] || { background: 'bg-gray-100', text: 'text-slate-800' };
+
+        const daySection = document.createElement('div');
+        daySection.className = `mb-4 rounded-lg overflow-hidden border border-slate-200`;
+
+        const header = document.createElement('div');
+        header.className = `px-3 py-2 font-semibold ${dc.background} ${dc.text}`;
+        header.textContent = day;
+        daySection.appendChild(header);
+
+        const slots = schedule.filter(e => e[0] === day);
+        slots.forEach(([_, time, course]) => {
+          const slotDiv = document.createElement('div');
+          slotDiv.className = 'flex flex-col sm:flex-row items-start sm:items-center gap-2 p-3 border-t border-slate-200';
+          const timeP = document.createElement('div');
+          timeP.className = 'text-xs font-medium text-slate-600 w-24';
+          timeP.textContent = time;
+          slotDiv.appendChild(timeP);
+          slotDiv.appendChild(CourseCard(course, dc));
+          daySection.appendChild(slotDiv);
+        });
+
+        root.appendChild(daySection);
+      });
+
+      document.getElementById('controls').style.display = 'none';
+    }
+
+    (function init() {
+      const ctrl = document.getElementById('controls');
+      renderGroupButtons(ctrl);
+    })();
+  </script>
+</body>
+</html>

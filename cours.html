@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الدروس - طلبة ليسانس</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>📘 الدروس</h1>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2>اختيار المادة</h2>
+    <div class="courses">
+      <button onclick="showLessons('litterature')">أدب فرنسي</button>
+      <button onclick="showLessons('linguistique')">لسانيات</button>
+      <button onclick="showLessons('traduction')">ترجمة</button>
+    </div>
+
+    <div id="lessons-container"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
