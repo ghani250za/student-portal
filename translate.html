@@ -17,20 +17,70 @@
     <a href="translate.html" class="font-bold underline">الترجمة</a>
   </nav>
 
-  <main class="max-w-6xl mx-auto p-4 text-center">
-    <h1 class="text-2xl font-bold mb-6">🌍 نافذة الترجمة</h1>
+  <main class="max-w-3xl mx-auto p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">🌍 مترجم النصوص</h1>
 
-    <!-- ✅ عنصر الترجمة -->
-    <div id="google_translate_element" class="p-4 bg-white rounded-xl shadow-lg inline-block"></div>
+    <div class="bg-white p-6 rounded-2xl shadow-lg space-y-4">
+      <!-- إدخال النص -->
+      <textarea id="text" rows="4" class="w-full border rounded-lg p-3" placeholder="أدخل النص هنا..."></textarea>
+
+      <!-- اختيار اللغات -->
+      <div class="flex flex-wrap gap-3">
+        <select id="source" class="border p-2 rounded-lg">
+          <option value="fr">الفرنسية</option>
+          <option value="en">الإنجليزية</option>
+          <option value="ar">العربية</option>
+        </select>
+        <span class="self-center">➡️</span>
+        <select id="target" class="border p-2 rounded-lg">
+          <option value="ar">العربية</option>
+          <option value="fr">الفرنسية</option>
+          <option value="en">الإنجليزية</option>
+        </select>
+      </div>
+
+      <!-- زر الترجمة -->
+      <button onclick="translateText()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">
+        ترجم
+      </button>
+
+      <!-- النتيجة -->
+      <div id="result" class="border rounded-lg p-3 bg-slate-100 min-h-[80px]"></div>
+    </div>
   </main>
 
-  <!-- ✅ سكربت جوجل للترجمة -->
-  <script type="text/javascript">
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({pageLanguage: 'fr'}, 'google_translate_element');
+  <script>
+    async function translateText() {
+      let text = document.getElementById("text").value;
+      let source = document.getElementById("source").value;
+      let target = document.getElementById("target").value;
+
+      if (!text.trim()) {
+        document.getElementById("result").innerText = "⚠️ أدخل نصاً للترجمة";
+        return;
+      }
+
+      document.getElementById("result").innerText = "⏳ جاري الترجمة...";
+
+      try {
+        let res = await fetch("https://libretranslate.de/translate", {
+          method: "POST",
+          body: JSON.stringify({
+            q: text,
+            source: source,
+            target: target,
+            format: "text"
+          }),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        let data = await res.json();
+        document.getElementById("result").innerText = data.translatedText;
+      } catch (e) {
+        document.getElementById("result").innerText = "❌ خطأ: لم يتم الترجمة";
+      }
     }
   </script>
 
-  <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
